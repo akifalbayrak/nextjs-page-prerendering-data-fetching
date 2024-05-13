@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import fs from "fs/promises";
+import getData from "../../data/dummy-backend";
 export default function ProductDetailPage(props) {
     const { loadedProduct } = props;
 
@@ -34,12 +35,12 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
+    const data = await getData();
+
+    const ids = data.products.map((product) => product.id);
+    const pathsWithParams = ids.map((id) => ({ params: { pid: id } }));
     return {
-        paths: [
-            { params: { pid: "p1" } },
-            { params: { pid: "p2" } },
-            { params: { pid: "p3" } },
-        ],
+        paths: pathsWithParams,
         fallback: false,
     };
 }
